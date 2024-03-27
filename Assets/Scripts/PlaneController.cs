@@ -4,63 +4,62 @@ using UnityEngine;
 
 public class PlaneController : MonoBehaviour
 {
-    Rigidbody rb;
+    private Rigidbody rb;
 
-    public float speed;
-    public float rotationSpeed;
-    public float lift;
+    public float speed = 10f;
     public float gravity = 9.81f;
+    public float lift = 10;
+    public float rotationSpeed = 10f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        //Move foward
-        rb.AddForce(transform.forward * speed, ForceMode.Acceleration);
+        //Forward
+        rb.AddForce(transform.forward * speed, ForceMode.VelocityChange);
     }
-    // -MAFS-
-    // Abs             - Makes number positive
-    // Clamp           - Ensures a value is between two other values
-    // Clamp01         - Clamps between 0 and 1
 
+    // Maths in games
+    // Mathf.Abs                  - "Makes negative number positive"
+    //                            - abs(50) = 50
+    //                            - abs(-50) = 50
+    // Clamp                      - Ensures a value is between two other values
+    //                            -    5 - 10
+    //                            -      5
+    // Clamp01
+    // 
+    // Invert a number
     // if N is between 0 - 1
-    // 1 - N 
-    // Invert a number 
-    // 0.3 = 0.7
-    // 0.1 = 0.9
+    // 1 - N
+    // 1 - 0.75
+    // 0.25
+    // 
+    //
+    // Lerp                       - Linear Interpolation
+    //                            -     5 - 10
+    //                            -       0.1
+    //                                =   5.5
+    // Sin/Cos                    - waves
+    //
+    // Dot product                - How much do vectors point in he same direction
+    //                              - from 1 to -1
+    // Cross product - X
+    //
 
-    // Lerp            - Linear Interpolation
-    //                        5  10
-    //                         0.1
-    //                          5.5
-    // Sin/Cos         - waves
-    // Dot product     - How much do vectors point in the same direction
-    //                 - from 1 to -1  
-    // Cross product   -
 
     void FixedUpdate()
     {
         //Input
         float input = Input.GetAxisRaw("Vertical");
         rb.AddTorque(transform.right * rotationSpeed * input * Time.deltaTime);
-        
+        //Adds rotation
 
 
         //Lift
         float dot = Vector3.Dot(transform.forward, Vector3.up);
         dot = 1 - Mathf.Abs(dot);
         float liftResult = lift * dot;
-        rb.AddForce(transform.up * liftResult * Time.deltaTime, ForceMode.Acceleration);
-
-        //Forward
-        //dot = Vector3.Dot(transform.forward, rb.velocity.normalized);
-        //dot = Mathf.Abs(dot);
-        rb.velocity = rb.velocity * dot;
-
-        //dot = 1 - Mathf.Abs(dot);
-        rb.velocity = transform.forward * rb.velocity.magnitude * dot;
-        
-
+        rb.AddForce(transform.up * lift * Time.deltaTime, ForceMode.Acceleration);
 
         //Gravity
         rb.AddForce(Vector3.down * gravity * Time.deltaTime, ForceMode.Acceleration);
