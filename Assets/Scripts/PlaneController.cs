@@ -51,19 +51,43 @@ public class PlaneController : MonoBehaviour
     {
         //Input
         float input = Input.GetAxisRaw("Vertical");
-        rb.AddTorque(transform.right * rotationSpeed * input * Time.deltaTime);
+        rb.AddTorque(transform.right * rotationSpeed * input);
         //Adds rotation
 
 
         //Lift
-        float dot = Vector3.Dot(transform.forward, Vector3.up);
-        dot = 1 - Mathf.Abs(dot);
-        float liftResult = lift * dot;
-        rb.AddForce(transform.up * lift * Time.deltaTime, ForceMode.Acceleration);
+        //float dot = Vector3.Dot(transform.forward, Vector3.up);
+        //dot = 1 - Mathf.Abs(dot);
+        //float liftResult = lift * dot;
+        rb.AddForce(transform.up * lift * SpeedMultiplier(), ForceMode.Acceleration);
 
         //Gravity
-        rb.AddForce(Vector3.down * gravity * Time.deltaTime, ForceMode.Acceleration);
+        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
-        rb.velocity = Quaternion.FromToRotation( rb.velocity, transform.forward) * rb.velocity;
+        //Drag
+        rb.AddForce(-transform.forward * 1f * SpeedMultiplier(), ForceMode.Acceleration);
+
+        //Turn Drag
+        float result = 1 - Vector3.Dot(rb.velocity.normalized, transform.forward);
+        rb.AddForce(-transform.forward * result, ForceMode.Acceleration);
+
+
+        //Velo moves forward
+        rb.velocity = Vector3.Lerp(rb.velocity.normalized, transform.forward, 0.01f) * rb.velocity.magnitude * 1f;// * (result * 0.01f);
+    }
+
+
+
+    float SpeedMultiplier()
+    {
+        return Mathf.InverseLerp(0, 10, rb.velocity.magnitude);
     }
 }
+
+
+
+
+
+
+
+
