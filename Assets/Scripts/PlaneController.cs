@@ -63,5 +63,7 @@ public class PlaneController : MonoBehaviour
 
         //Gravity
         rb.AddForce(Vector3.down * gravity * Time.deltaTime, ForceMode.Acceleration);
+
+        rb.velocity = Quaternion.FromToRotation( rb.velocity, transform.forward) * rb.velocity;
     }
 }
