@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f876efaea68f5f54082206422db2c2bc, type: 3}
-  m_Name: Super Boost
+  m_Script: {fileID: 11500000, guid: c8f898690674a0b46a49df0ab25f1b43, type: 3}
+  m_Name: Slow Down
   m_EditorClassIdentifier: 
-  boost: 1000
+  boost: -10

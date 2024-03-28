@@ -28,17 +28,23 @@ public class PlaneController : MonoBehaviour
     //                            -      5
     // Clamp01
     // 
+    // 1 - N
     // Invert a number
     // if N is between 0 - 1
-    // 1 - N
     // 1 - 0.75
     // 0.25
     // 
     //
     // Lerp                       - Linear Interpolation
     //                            -     5 - 10
-    //                            -       0.1
-    //                                =   5.5
+    //                            -       0.5
+    //                                =   7.5
+    
+    // Inverse Lerp
+    //                          5 - 10
+    //                            7.5
+    //                             0.5
+    
     // Sin/Cos                    - waves
     //
     // Dot product                - How much do vectors point in he same direction
@@ -51,7 +57,7 @@ public class PlaneController : MonoBehaviour
     {
         //Input
         float input = Input.GetAxisRaw("Vertical");
-        rb.AddTorque(transform.right * rotationSpeed * input);
+        rb.AddTorque(transform.right * rotationSpeed * input, ForceMode.Acceleration);
         //Adds rotation
 
 
@@ -68,19 +74,16 @@ public class PlaneController : MonoBehaviour
         rb.AddForce(-transform.forward * 1f * SpeedMultiplier(), ForceMode.Acceleration);
 
         //Turn Drag
-        float result = 1 - Vector3.Dot(rb.velocity.normalized, transform.forward);
-        rb.AddForce(-transform.forward * result, ForceMode.Acceleration);
+        float result = 1 - Vector3.Dot(rb.velocity.normalized, transform.forward); 
+        rb.AddForce(-transform.forward * 1f * result, ForceMode.Acceleration);
 
-
-        //Velo moves forward
-        rb.velocity = Vector3.Lerp(rb.velocity.normalized, transform.forward, 0.01f) * rb.velocity.magnitude * 1f;// * (result * 0.01f);
+        //Velocity direction moves to forward direction
+        rb.velocity = Vector3.Lerp(rb.velocity.normalized, transform.forward, Time.deltaTime).normalized 
+                      * rb.velocity.magnitude;
     }
-
-
-
     float SpeedMultiplier()
     {
-        return Mathf.InverseLerp(0, 10, rb.velocity.magnitude);
+        return Mathf.InverseLerp(0, 10,rb.velocity.magnitude );   
     }
 }
 

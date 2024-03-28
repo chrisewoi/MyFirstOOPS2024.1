@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f898690674a0b46a49df0ab25f1b43, type: 3}
-  m_Name: boost
+  m_Script: {fileID: 11500000, guid: 60436aa2a9029ce47a11e2674ee93e48, type: 3}
+  m_Name: Push down
   m_EditorClassIdentifier: 
-  boost: 100
+  jump: -10

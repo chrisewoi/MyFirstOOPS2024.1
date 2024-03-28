@@ -5,10 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "boost", menuName = "Powerup/Boost")]
 public class BoostPowerup : Powerup
 {
+    public float boost = 10;
+    
     public override void UsePowerup(Rigidbody rb)
     {
-        base.UsePowerup(rb);
-
-        Debug.Log("This is boost class");
+        rb.AddRelativeForce(Vector3.forward * boost, ForceMode.VelocityChange);
     }
 }
