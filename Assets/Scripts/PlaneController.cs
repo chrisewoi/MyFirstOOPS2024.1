@@ -31,8 +31,8 @@ public class PlaneController : MonoBehaviour
 
     // Lerp            - Linear Interpolation
     //                        5  10
-    //                         0.1
-    //                          5.5
+    //                         0.5
+    //                          7.5
     // Sin/Cos         - waves
     // Dot product     - How much do vectors point in the same direction
     //                 - from 1 to -1  
@@ -42,27 +42,32 @@ public class PlaneController : MonoBehaviour
     {
         //Input
         float input = Input.GetAxisRaw("Vertical");
-        rb.AddTorque(transform.right * rotationSpeed * input * Time.deltaTime);
+        rb.AddTorque(transform.right * rotationSpeed * input, ForceMode.Acceleration);
         
-
-
         //Lift
-        float dot = Vector3.Dot(transform.forward, Vector3.up);
-        dot = 1 - Mathf.Abs(dot);
-        float liftResult = lift * dot;
-        rb.AddForce(transform.up * liftResult * Time.deltaTime, ForceMode.Acceleration);
-
-        //Forward
-        //dot = Vector3.Dot(transform.forward, rb.velocity.normalized);
-        //dot = Mathf.Abs(dot);
-        rb.velocity = rb.velocity * dot;
-
-        //dot = 1 - Mathf.Abs(dot);
-        rb.velocity = transform.forward * rb.velocity.magnitude * dot;
-        
-
+        // float dot = Vector3.Dot(transform.forward, Vector3.up);
+        // dot = 1 - Mathf.Abs(dot);
+        // float liftResult = lift * dot;
+        rb.AddForce(transform.up * lift * SpeedMultiplier(), ForceMode.Acceleration);
 
         //Gravity
-        rb.AddForce(Vector3.down * gravity * Time.deltaTime, ForceMode.Acceleration);
+        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+        
+        //Drag
+        rb.AddForce(-transform.forward * 1f * SpeedMultiplier(), ForceMode.Acceleration);
+        
+        //Turn Drag
+        float result = 1 - Vector3.Dot(rb.velocity.normalized, transform.forward);
+        rb.AddForce(-transform.forward * result, ForceMode.Acceleration);
+        
+        //Velocity direction slowly turn forward
+        rb.velocity = Vector3.Lerp(rb.velocity.normalized, transform.forward, Time.deltaTime).normalized
+                      * rb.velocity.magnitude;
+    }
+
+
+    float SpeedMultiplier()
+    {
+        return Mathf.InverseLerp(0,10, rb.velocity.magnitude);
     }
 }

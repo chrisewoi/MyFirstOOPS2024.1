@@ -8,6 +8,6 @@ public class ItemBox : TriggerZone
 
     public override void Activate(Collider other)
     {
-        Debug.Log("Item Picked up");
+       powerup.UsePowerup(other.attachedRigidbody); 
     }
 }
