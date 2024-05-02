@@ -18,4 +18,9 @@ public class GravityUprade : BaseUpgrade
         planeController.gravity = Mathf.Clamp(planeController.gravity, 0f, 20f);
 
     }
+    
+    public override string UpgradeName()
+    {
+        return "Gravity " + upgradeGravity;
+    }
 }

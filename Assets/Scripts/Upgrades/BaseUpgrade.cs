@@ -8,6 +8,8 @@ public abstract class BaseUpgrade
 
     public abstract void ApplyUpgrade();
 
+    public abstract string UpgradeName();
+    
     public bool PayForUpgrade(ref int money)
     {
         if (money >= cost)
